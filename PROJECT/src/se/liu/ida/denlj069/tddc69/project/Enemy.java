@@ -10,7 +10,7 @@ import java.awt.*;
  * Time: 13:08
  * To change this template use File | Settings | File Templates.
  */
-public class Enemy implements Runnable{
+public class Enemy{
 
     private Rectangle enemyRect;
     private Rectangle detectRadius;
@@ -18,29 +18,33 @@ public class Enemy implements Runnable{
     private final static int DETECTION_RADIUS_ORIGIN = 200;
     private final static int DETECTION_RADIUS_WIDTH = 360;
     private final static int DETECTION_RADIUS_HEIGHT = 360;
+    private final static int ATTACKING_TIME = 1000;
+    private final static int RESTING_TIME = 2000;
     private Rectangle player;
     private int xDirection, yDirection;
     private boolean alerted = false;
     private boolean resting = false;
     private World world;
-    private Thread enemy;
     private int health;
+    private int speed;
     private boolean alive;
     private int pwiX,pwiY = 0;
     private int damage;
     private int expreward;
+    private long start;
 
     private Image ENEMY_LEFT, ENEMY_RIGHT;
     private Image enemyimg;
 
 
-    public Enemy(int health, int damage, int expreward, int x, int y, World world){
+    public Enemy(int health, int damage, int speed, int expreward, int x, int y, World world){
 
         loadImages();
 
         enemyimg = ENEMY_LEFT;
 	this.health = health;
 	this.damage = damage;
+	this.speed = speed;
 	this.expreward = expreward;
         enemyRect = new Rectangle(x, y, enemyimg.getWidth(null), enemyimg.getHeight(null));
         detectRadius = new Rectangle(x-DETECTION_RADIUS_ORIGIN, y-DETECTION_RADIUS_ORIGIN,
@@ -58,55 +62,60 @@ public class Enemy implements Runnable{
 
     }
 
-    public void run(){
-        try{
-            while(alerted){
+    public void update(){
 
-                 if(!resting){
+	if(alerted){
 
-                    long start = System.currentTimeMillis();
-                    long end = start + 1000;
-                    while(System.currentTimeMillis() < end){
+	    if(!resting){
 
-                        findPlayer();
-                        setAnimation();
+		if(start == 0) {
 
-                        if(canMove()){
+		    start = System.currentTimeMillis();
 
-                            move();
+		}
+		if(System.currentTimeMillis() < start + ATTACKING_TIME){
 
-                        }
-                        enemy.sleep(5);
+		    findPlayer();
+		    setAnimation();
+		    if(canMove()){
 
-                    }
+			move();
 
-                 resting = true;
-                }
-                else{
+		    }
 
-                     enemy.sleep(2000);
-                     resting = false;
+		}
+		else{
 
-                 }
-          }
+		    resting = true;
+		    start = 0;
 
-        }catch(Exception e){
+		}
 
-            e.printStackTrace();
+	    }
+	    else{
 
-        }
+		if(start == 0){
+		    start = System.currentTimeMillis();
+		}
+		if(System.currentTimeMillis() >= start + RESTING_TIME){
 
+		    resting = false;
+		    start = 0;
 
+		}
+
+	    }
+
+	}
 
     }
 
-
     private void move(){
 
-        enemyRect.x += xDirection;
-        enemyRect.y += yDirection;
-        detectRadius.x += xDirection;
-        detectRadius.y += yDirection;
+        enemyRect.x += xDirection*speed;
+        enemyRect.y += yDirection*speed;
+        detectRadius.x += xDirection*speed;
+        detectRadius.y += yDirection*speed;
 
     }
 
@@ -156,8 +165,6 @@ public class Enemy implements Runnable{
 
         if(!alerted){
 
-            enemy = new Thread(this);
-            enemy.start();
             alerted = true;
 
         }

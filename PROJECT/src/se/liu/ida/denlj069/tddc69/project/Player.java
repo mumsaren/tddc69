@@ -52,7 +52,6 @@ public class Player{
         cash = 0;
         exp = 0;
         speed = 4;
-
         inventory = new Inventory(5, 10);
 
         loadImages();
@@ -112,7 +111,7 @@ public class Player{
 
             checkCollisions();
 
-            }
+        }
     }
 
     public void draw(Graphics2D g){
@@ -215,6 +214,7 @@ public class Player{
 
 		    world.removeItem(i);
 		    cash++;
+		    notifyListeners();
 
 		}
 	    }
@@ -242,7 +242,7 @@ public class Player{
                            enemy.hurt(DAMAGE, faceDirectionX, faceDirectionY, FORCE);
                        }
                        else{
-                           world.getEnemies().remove(i);
+			   world.getEnemies().remove(i);
 			   exp += enemy.getExpreward();
 			   notifyListeners();
 
@@ -278,7 +278,7 @@ public class Player{
                     }else{
 
                         friend.stopTalking();
-
+			notifyListeners();
                     }
 
                     using = false;

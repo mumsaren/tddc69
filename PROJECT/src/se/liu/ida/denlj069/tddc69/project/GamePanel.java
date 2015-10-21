@@ -15,10 +15,12 @@ import java.awt.event.KeyEvent;
 public class GamePanel extends JPanel implements Runnable{
 
     private static final int GWIDTH = 800, GHEIGHT = 480;
-    private static final Dimension gameDim = new Dimension(GWIDTH, GHEIGHT);
+    private static final Dimension GAME_DIM = new Dimension(GWIDTH, GHEIGHT);
+    private static final long GAME_SPEED = 20;
 
-
-    private static final long gamespeed = 20;
+    private static final int GAME_OVER_FONT_SIZE = 50;
+    private static final int GAME_OVER_TEXT_X = 250;
+    private static final int GAME_OVER_TEXT_Y = 200;
 
     private boolean running = false;
     private boolean pause = false;
@@ -26,22 +28,21 @@ public class GamePanel extends JPanel implements Runnable{
 
     private Player p1;
     private World world;
-    private QuestSystem qs;
     private HUD hud;
 
 
     public GamePanel(){
 
         addKeyListener(new ActionListener());
-        setPreferredSize(gameDim);
+        setPreferredSize(GAME_DIM);
         setFocusable(true);
         requestFocus();
         setDoubleBuffered(true);
 
         world = new World("map");
         p1 = new Player(world);
-	qs = new QuestSystem(world,p1);
-        hud = new HUD(p1,qs);
+	QuestSystem qs = new QuestSystem(world,p1);
+        hud = new HUD(p1,qs,world);
 
         startGame();
 
@@ -56,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
             }
             try {
-                Thread.sleep(gamespeed);
+                Thread.sleep(GAME_SPEED);
             } catch (InterruptedException e) {
 
                e.printStackTrace();
@@ -96,8 +97,8 @@ public class GamePanel extends JPanel implements Runnable{
             g2d.setComposite(AlphaComposite.SrcOver.derive(1f));
 
             g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 50));
-            g2d.drawString("YOU'RE DEAD", 250, 200);
+            g2d.setFont(new Font("Arial", Font.BOLD, GAME_OVER_FONT_SIZE));
+            g2d.drawString("YOU'RE DEAD", GAME_OVER_TEXT_X, GAME_OVER_TEXT_Y);
 
         }
 
@@ -202,7 +203,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public Dimension getPreferredSize(){
 
-        return gameDim;
+        return GAME_DIM;
 
     }
 

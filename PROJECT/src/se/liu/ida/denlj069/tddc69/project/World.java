@@ -30,6 +30,7 @@ public class World {
     public World(String mapname) {
 
         this.mapname = mapname;
+	mapinfo = new ArrayList<Character>();
 
         try {
             loadMap();
@@ -55,13 +56,12 @@ public class World {
 
         char c;
         int counter = 0;
-        mapinfo = new ArrayList<Character>();
 
         while ((c = (char) infile.read()) != 'E') {
             counter++;
             if (c == 'R') {
                 mapwidth = counter - 1;
-            } else if (c == '-' || c == 'x' || c == 'c' || c == 'e' || c == 'w'
+            }else if (c == '-' || c == 'x' || c == 'c' || c == 'e' || c == 'w'
                     || c == 'i' || c == 's' || c == 'm') {
                 mapinfo.add(c);
             }
@@ -100,7 +100,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Enemy enemy = new Enemy(50, 10, 5, x, y, this);
+                Enemy enemy = new Enemy(50, 10, 4, 5, x, y, this);
 
                 enemies.add(enemy);
             }
@@ -108,7 +108,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, Friend.Actions.WALK);
+                Friend friend = new Friend(x, y, 1, Friend.Actions.WALK);
 
                 friends.add(friend);
             }
@@ -116,7 +116,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, Friend.Actions.IDLE);
+                Friend friend = new Friend(x, y, 2, Friend.Actions.IDLE);
 
                 friends.add(friend);
 
@@ -125,7 +125,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, Friend.Actions.STAND);
+                Friend friend = new Friend(x, y, 1, Friend.Actions.STAND);
 
                 friends.add(friend);
 
@@ -169,7 +169,16 @@ public class World {
 
     public void update() {
 
+	for(int i = 0; i < enemies.size(); i++){
 
+	    enemies.get(i).update();
+
+	}
+	for(int i = 0; i < friends.size(); i++){
+
+	    friends.get(i).update();
+
+	}
 
     }
 
@@ -283,6 +292,12 @@ public class World {
     public int getGridSquareSize(){
 
 	return GRID_SQUARE_SIZE;
+
+    }
+
+    public int getMapSectionWidth(){
+
+	return MAP_SECTION_WIDTH;
 
     }
 

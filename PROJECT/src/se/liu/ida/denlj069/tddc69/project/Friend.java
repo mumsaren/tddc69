@@ -1,7 +1,6 @@
 package se.liu.ida.denlj069.tddc69.project;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,17 +9,23 @@ import java.util.ArrayList;
  * Time: 13:58
  * To change this template use File | Settings | File Templates.
  */
-public class Friend implements Runnable {
+public class Friend {
 
-
+    private static final int FRIEND_RECT_WIDTH = 40;
+    private static final int FRIEND_RECT_HEIGHT = 40;
+    private static final int DETECTION_BOX_WIDTH = 800;
+    private static final int DETECTION_BOX_HEIGHT = 400;
+    private static final int MOVE_TIME = 1000;
+    private static final int RESTING_TIME = 2000;
     private int xDirection, yDirection;
     private Rectangle friendRect;
     private Rectangle detectradius;
-    private Thread friend;
     private boolean talking = false;
     private boolean active = false;
     private boolean resting = false;
     private int counter = 0;
+    private int speed;
+    private long start;
 
     private Actions action;
 
@@ -30,159 +35,130 @@ public class Friend implements Runnable {
 
     }
 
-    public Friend(int x, int y, Actions action){
+    public Friend(int x, int y, int speed, Actions action){
 
-        friendRect = new Rectangle(x, y, 40, 40);
-        detectradius = new Rectangle((x-800)+400,(y-400)+200, 800, 400);
-
+        friendRect = new Rectangle(x, y, FRIEND_RECT_WIDTH, FRIEND_RECT_HEIGHT);
+        detectradius = new Rectangle((x-DETECTION_BOX_WIDTH)+(DETECTION_BOX_WIDTH/2),
+				     (y-DETECTION_BOX_HEIGHT)+(DETECTION_BOX_HEIGHT/2),
+				     DETECTION_BOX_WIDTH, DETECTION_BOX_HEIGHT);
         this.action = action;
-
+	this.speed = speed;
         active = true;
-
         xDirection = 0;
         yDirection = 0;
-
-
 
     }
 
     public void draw(Graphics2D g){
 
         g.setColor(Color.green);
-        g.fillRect(friendRect.x, friendRect.y, 40, 40);
-
-        //g.setComposite(AlphaComposite.SrcOver.derive(0.5f));
-        //g.fillRect(detectradius.x, detectradius.y, 800, 400);
-
+        g.fillRect(friendRect.x, friendRect.y, FRIEND_RECT_WIDTH, FRIEND_RECT_HEIGHT);
 
     }
 
-    public void run(){
+    public void update(){
 
-       try{
-        while(active){
+	if(active){
+	    if(!talking){
+		if(!resting){
+		    switch(action){
 
-            if(!talking){
+			case WALK:
 
-                switch(action){
+			    if(start == 0) {
+				start = System.currentTimeMillis();
+			    }
+			    if(System.currentTimeMillis() < start + MOVE_TIME){
 
-                    case WALK:
+				move();
 
-                        if(!resting){
+			    }
+			    else{
 
-                            setDirectionPath();
-
-
-                            long start = System.currentTimeMillis();
-                            while(System.currentTimeMillis() < start + 1000){
-
-                                move();
-
-                                friend.sleep(15);
-
-                            }
-
-
-                            resting = true;
-                        }
-                        else{
-
-                            friend.sleep(1000);
-                            resting = false;
-
-                        }
+				setDirectionPath();
+				resting = true;
+				start = 0;
+			    }
+			    break;
+		    	case IDLE:
 
 
+			    if(start == 0){
 
-                        break;
-                    case IDLE:
+				start = System.currentTimeMillis();
 
-                        if(!resting){
+			    }
+			    if(System.currentTimeMillis() < start + MOVE_TIME){
 
-                            if(xDirection == 1){
+				move();
 
-                                xDirection = -1;
+			    }
+			    else{
 
-                            }
-                            else{
+				if(xDirection == 1){
 
-                                xDirection = 1;
+				    xDirection = -1;
 
+				}
+				else{
 
-                            }
+				    xDirection = 1;
+				}
+				resting = true;
+				start = 0;
 
+			    }
 
-                            long start = System.currentTimeMillis();
-                            while(System.currentTimeMillis() < start + 1000){
+			    break;
+			case STAND:
 
-                                move();
+    				if(start == 0){
 
-                                friend.sleep(20);
+				    start = System.currentTimeMillis();
 
-                            }
+				}
+    				if(System.currentTimeMillis() >= start + MOVE_TIME){
 
+				    if(xDirection == 1){
 
-                            resting = true;
-                        }
-                        else{
+					xDirection = -1;
 
-                            friend.sleep(3000);
-                            resting = false;
+				    }
+				    else{
 
-                        }
-
-
-                        break;
-                    case STAND:
-
-                        if(!resting){
-
-                            if(xDirection == 1){
-
-                                xDirection = -1;
-
-                            }
-                            else{
-
-                                xDirection = 1;
+					xDirection = 1;
 
 
-                            }
+				    }
+				    resting = true;
+				    start = 0;
+
+				}
+
+			    break;
+
+		    }
+
+		}else{
+
+		    if(start == 0){
+
+			start = System.currentTimeMillis();
+
+		    }
+		    if(System.currentTimeMillis() >= start + RESTING_TIME){
+
+		       resting = false;
+		       start = 0;
+
+		    }
 
 
-                            long start = System.currentTimeMillis();
-                            while(System.currentTimeMillis() < start + 1000){
+		}
 
-                                friend.sleep(15);
+	    }
 
-                            }
-
-
-                            resting = true;
-                        }
-                        else{
-
-                            friend.sleep(3000);
-                            resting = false;
-
-                        }
-
-
-                        break;
-
-
-
-                }
-            }
-
-
-        }
-        }catch(Exception e){
-
-            e.printStackTrace();
-
-        }
-
+	}
 
     }
 
@@ -208,8 +184,8 @@ public class Friend implements Runnable {
 
     private void move(){
 
-        friendRect.x += xDirection;
-        friendRect.y += yDirection;
+        friendRect.x += xDirection*speed;
+        friendRect.y += yDirection*speed;
 
     }
 
@@ -258,8 +234,6 @@ public class Friend implements Runnable {
 
         if(!active){
 
-            friend = new Thread(this);
-            friend.start();
             active = true;
 
         }

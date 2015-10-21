@@ -33,7 +33,6 @@ public abstract class Item {
         g.drawImage(itemImg, itemRect.x, itemRect.y, itemImg.getWidth(null),
                 itemImg.getHeight(null), null);
 
-
     }
 
     public void moveX(int distance, int dir){

@@ -14,12 +14,52 @@ import java.util.List;
  */
 public class HUD{
 
+    private static final int EXP_BAR_X = 145;
+    private static final int EXP_BAR_Y = 25;
+    private static final int EXP_BAR_SLICE_WIDTH = 5;
+    private static final int EXP_BAR_HEIGHT = 20;
+    private static final int EXP_BAR_SLICES = 20;
+    private static final int EXP_FONT_SIZE = 14;
+    private static final int EXP_TEXT_X = 149;
+    private static final int EXP_TEXT_Y = 18;
+    private static final int EXP_BAR_BORDER_X = 149;
+    private static final int EXP_BAR_BORDER_Y = 24;
+    private static final int EXP_BAR_BORDER_WIDTH = 101;
+    private static final int EXP_BAR_BORDER_HEIGHT = 21;
+    private static final int HEALTH_BAR_X = 15;
+    private static final int HEALTH_BAR_Y = 25;
+    private static final int HEALTH_BAR_SLICE_WIDTH = 5;
+    private static final int HEALTH_BAR_HEIGHT = 20;
+    private static final int HEALTH_BAR_SLICES = 20;
+    private static final int HEALTH_BAR_BORDER_X = 19;
+    private static final int HEALTH_BAR_BORDER_Y = 24;
+    private static final int HEALTH_BAR_BORDER_WIDTH = 101;
+    private static final int HEALTH_BAR_BORDER_HEIGHT = 21;
+    private static final int HEALTH_FONT_SIZE = 14;
+    private static final int HEALTH_TEXT_X = 19;
+    private static final int HEALTH_TEXT_Y = 18;
+    private static final int BACKGROUND_HEIGHT = 80;
+    private static final int CASH_IMG_X = 70;
+    private static final int CASH_IMG_Y = 10;
+    private static final int CASH_FONT_SIZE = 15;
+    private static final int CASH_TEXT_X = 80;
+    private static final int CASH_TEXT_Y = 50;
+    private static final int QUEST_IMG_X = 0;
+    private static final int QUEST_IMG_Y = 80;
+    private static final int QUEST_FONT_SIZE = 15;
+    private static final int QUEST_TEXT_X = 20;
+    private static final int QUEST_TEXT_Y = 180;
+    private static final int QUEST_C_TEXT_X = 680;
+    private static final int QUEST_C_TEXT_SPACE = 20;
+    private static final int QUEST_C_TEXT_Y = 180;
+
     private Player player;
     private QuestSystem quests;
-    private Image cashimg, questimg;
+    private World world;
+    private Image cashImg, questImg;
 
-    private java.util.List<Rectangle> healthbar;
-    private List<Rectangle> expbar;
+    private java.util.List<Rectangle> healthBar;
+    private List<Rectangle> expBar;
 
     private boolean showInventory = false;
     private boolean showQuests = false;
@@ -32,10 +72,11 @@ public class HUD{
 
     private ShowStuff stuff;
 
-    public HUD(Player player, QuestSystem quests){
+    public HUD(Player player, QuestSystem quests, World world){
 
         this.player = player;
 	this.quests = quests;
+	this.world = world;
 
         loadImages();
 
@@ -48,8 +89,8 @@ public class HUD{
 
     private void loadImages(){
 
-        cashimg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/cash.png").getImage();
-        questimg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/Quest.png").getImage();
+        cashImg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/cash.png").getImage();
+        questImg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/Quest.png").getImage();
 
     }
 
@@ -82,14 +123,15 @@ public class HUD{
 
     private void createExpbar(){
 
-        int xCoord = 145;
-        expbar = new ArrayList<Rectangle>();
-        for(int i = 0; i < 20; i++){
+	int xCoord = 0;
+        expBar = new ArrayList<Rectangle>();
+        for(int i = 0; i < EXP_BAR_SLICES; i++){
 
-            xCoord += 5;
+            xCoord += EXP_BAR_SLICE_WIDTH;
 
-            Rectangle exp = new Rectangle(xCoord, 25, 5, 20);
-            expbar.add(exp);
+            Rectangle exp = new Rectangle(xCoord + EXP_BAR_X, EXP_BAR_Y,
+					  EXP_BAR_SLICE_WIDTH, EXP_BAR_HEIGHT);
+            expBar.add(exp);
 
         }
 
@@ -97,14 +139,15 @@ public class HUD{
 
     private void createHealthbar(){
 
-        int xCoord = 15;
-        healthbar = new ArrayList<Rectangle>();
-        for(int i = 0; i < 20; i++){
+        int xCoord = 0;
+        healthBar = new ArrayList<Rectangle>();
+        for(int i = 0; i < HEALTH_BAR_SLICES; i++){
 
-            xCoord += 5;
+            xCoord += HEALTH_BAR_SLICE_WIDTH;
 
-            Rectangle health = new Rectangle(xCoord, 25, 5, 20);
-            healthbar.add(health);
+            Rectangle health = new Rectangle(xCoord + HEALTH_BAR_X, HEALTH_BAR_Y,
+					     HEALTH_BAR_SLICE_WIDTH, HEALTH_BAR_HEIGHT);
+            healthBar.add(health);
 
         }
 
@@ -115,34 +158,31 @@ public class HUD{
     private void drawBorder(Graphics2D g){
 
         g.setColor(Color.black);
-        g.fillRect(0,0,800,80);
+        g.fillRect(0,0,world.getMapSectionWidth(),BACKGROUND_HEIGHT);
 
     }
 
     private void drawCash(Graphics2D g){
 
-        g.drawImage(cashimg, 800 - 70, 10, null);
-        g.setFont(new Font("Serif", Font.ITALIC, 16));
-        g.setColor(Color.black);
-        g.drawString("" + player.getCash(), 800 - 80, 50);
+        g.drawImage(cashImg, world.getMapSectionWidth() - CASH_IMG_X, CASH_IMG_Y, null);
         g.setColor(Color.yellow);
-        g.setFont(new Font("Serif", Font.ITALIC, 15));
-        g.drawString("" + player.getCash(), 800 - 80, 50);
+        g.setFont(new Font("Serif", Font.ITALIC, CASH_FONT_SIZE));
+        g.drawString(String.valueOf(player.getCash()), world.getMapSectionWidth() - CASH_TEXT_X, CASH_TEXT_Y);
 
     }
 
     private void drawHealthbar(Graphics2D g){
 
-        g.setFont(new Font("Serif", Font.ITALIC, 14));
+        g.setFont(new Font("Serif", Font.ITALIC, HEALTH_FONT_SIZE));
 
         g.setColor(Color.white);
-        g.drawString("HEALTH", 19, 18);
+        g.drawString("HEALTH", HEALTH_TEXT_X, HEALTH_TEXT_Y);
 
-        g.drawRect(19, 24, 101, 21);
+        g.drawRect(HEALTH_BAR_BORDER_X, HEALTH_BAR_BORDER_Y, HEALTH_BAR_BORDER_WIDTH, HEALTH_BAR_BORDER_HEIGHT);
         g.setColor(Color.red);
-        for(int i = 0; i < player.getHealth()/5; i++){
+        for(int i = 0; i < player.getHealth()/HEALTH_BAR_SLICE_WIDTH; i++){
 
-            g.fillRect(healthbar.get(i).x, healthbar.get(i).y, healthbar.get(i).width, healthbar.get(i).height);
+            g.fillRect(healthBar.get(i).x, healthBar.get(i).y, healthBar.get(i).width, healthBar.get(i).height);
 
 
         }
@@ -151,9 +191,9 @@ public class HUD{
 
     private void drawQuests(Graphics2D g){
 
-        g.drawImage(questimg, 0, 80, null);
+        g.drawImage(questImg, QUEST_IMG_X, QUEST_IMG_Y, null);
 
-        g.setFont(new Font("Serif", Font.BOLD, 14));
+        g.setFont(new Font("Serif", Font.BOLD, QUEST_FONT_SIZE));
         g.setColor(Color.yellow);
 
 
@@ -161,14 +201,15 @@ public class HUD{
 
             Quest quest = quests.getCurrentQuest();
 
-            g.drawString(quest.getName(), 20, 180);
+            g.drawString(quest.getName(), QUEST_TEXT_X, QUEST_TEXT_Y);
 
         }
 
 
         for(int i = 0; i < quests.getCompletedQuests().size(); i++){
 
-             g.drawString(quests.getCompletedQuests().get(i).getName(), 680, i*20 + 180);
+             g.drawString(quests.getCompletedQuests().get(i).getName(), QUEST_C_TEXT_X,
+			  i*QUEST_C_TEXT_SPACE + QUEST_C_TEXT_Y);
 
         }
 
@@ -176,16 +217,16 @@ public class HUD{
 
     private void drawExpbar(Graphics2D g){
 
-        g.setFont(new Font("Serif", Font.ITALIC, 14));
+        g.setFont(new Font("Serif", Font.ITALIC, EXP_FONT_SIZE));
 
         g.setColor(Color.white);
-        g.drawString("EXP", 149, 18);
-        g.drawRect(149, 24, 101, 21);
+        g.drawString("EXP", EXP_TEXT_X, EXP_TEXT_Y);
+        g.drawRect(EXP_BAR_BORDER_X, EXP_BAR_BORDER_Y, EXP_BAR_BORDER_WIDTH, EXP_BAR_BORDER_HEIGHT);
 
         g.setColor(Color.cyan);
         for(int i = 0; i < player.getExp()/5; i++){
 
-            g.fillRect(expbar.get(i).x, expbar.get(i).y, expbar.get(i).width, expbar.get(i).height);
+            g.fillRect(expBar.get(i).x, expBar.get(i).y, expBar.get(i).width, expBar.get(i).height);
 
 
         }
@@ -193,9 +234,9 @@ public class HUD{
 
     }
 
-    public void display(ShowStuff s){
+    public void display(ShowStuff stuff){
 
-        stuff = s;
+        this.stuff = stuff;
         checkStuff();
 
     }
