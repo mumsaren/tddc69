@@ -22,8 +22,6 @@ public class Friend implements Runnable {
     private boolean resting = false;
     private int counter = 0;
 
-    private Quest quest;
-
     private Actions action;
 
     public enum Actions{
@@ -63,16 +61,6 @@ public class Friend implements Runnable {
 
        try{
         while(active){
-
-            if(hasQuest()){
-
-                if(quest.isCompleted()){
-
-                    quest = null;
-
-                }
-
-            }
 
             if(!talking){
 
@@ -257,25 +245,6 @@ public class Friend implements Runnable {
         }
 
 
-
-    }
-
-
-    public boolean hasQuest(){
-
-        return quest != null;
-
-    }
-
-    public void setQuest(Quest q){
-
-        quest = q;
-
-    }
-
-    public Quest getQuest(){
-
-        return quest;
 
     }
 

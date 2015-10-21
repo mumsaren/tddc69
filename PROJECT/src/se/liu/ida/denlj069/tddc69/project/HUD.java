@@ -2,7 +2,8 @@ package se.liu.ida.denlj069.tddc69.project;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,10 +15,11 @@ import java.util.ArrayList;
 public class HUD{
 
     private Player player;
+    private QuestSystem quests;
     private Image cashimg, questimg;
 
-    private ArrayList<Rectangle> healthbar;
-    private ArrayList<Rectangle> expbar;
+    private java.util.List<Rectangle> healthbar;
+    private List<Rectangle> expbar;
 
     private boolean showInventory = false;
     private boolean showQuests = false;
@@ -28,11 +30,12 @@ public class HUD{
 
     }
 
-    ShowStuff stuff;
+    private ShowStuff stuff;
 
-    public HUD(Player player){
+    public HUD(Player player, QuestSystem quests){
 
         this.player = player;
+	this.quests = quests;
 
         loadImages();
 
@@ -54,7 +57,6 @@ public class HUD{
     public void draw(Graphics2D g){
 
         g.setComposite(AlphaComposite.SrcOver.derive(1.0f));
-
 
         drawBorder(g);
 
@@ -154,22 +156,21 @@ public class HUD{
         g.setFont(new Font("Serif", Font.BOLD, 14));
         g.setColor(Color.yellow);
 
-        if(player.hasQuest()){
 
-            Quest quest = player.getCurrentQuest();
+        if(quests.doingQuest()){
+
+            Quest quest = quests.getCurrentQuest();
 
             g.drawString(quest.getName(), 20, 180);
 
         }
 
 
-        for(int i = 0; i < player.getCompletedquests().size(); i++){
+        for(int i = 0; i < quests.getCompletedQuests().size(); i++){
 
-             g.drawString(player.getCompletedquests().get(i).getName(), 680, i*20 + 180);
+             g.drawString(quests.getCompletedQuests().get(i).getName(), 680, i*20 + 180);
 
         }
-
-
 
     }
 

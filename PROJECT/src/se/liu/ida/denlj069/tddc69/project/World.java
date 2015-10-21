@@ -2,7 +2,8 @@ package se.liu.ida.denlj069.tddc69.project;
 
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,16 +16,16 @@ public class World {
 
     private String mapname;
     private ArrayList<Character> mapinfo;
-    protected Rectangle[] mapcollision;
-    protected boolean[] ismapSolid;
+    private final static int GRID_SQUARE_SIZE = 40;
+    private final static int MAP_SECTION_WIDTH = 800;
+    private final static int MAP_SECTION_HEIGHT = 400;
+    private Rectangle[] mapCollision;
+    private boolean[] mapSolid;
     private int mapwidth;
     private int xDirection, yDirection;
-    private ArrayList<Item> mapitems;
-    private ArrayList<Enemy> enemies;
-    private ArrayList<Friend> friends;
-
-    private Quest q001,q002;
-
+    private List<Item> mapitems;
+    private List<Enemy> enemies;
+    private List<Friend> friends;
 
     public World(String mapname) {
 
@@ -37,17 +38,13 @@ public class World {
             e.printStackTrace();
         }
 
-        System.out.println(mapwidth);
-        System.out.println(mapinfo.size());
-
-        mapcollision = new Rectangle[mapinfo.size()];
-        ismapSolid = new boolean[mapinfo.size()];
+        mapCollision = new Rectangle[mapinfo.size()];
+        mapSolid = new boolean[mapinfo.size()];
         mapitems = new ArrayList<Item>();
         enemies = new ArrayList<Enemy>();
         friends = new ArrayList<Friend>();
 
         loadInfo();
-        loadQuests();
 
     }
 
@@ -77,47 +74,47 @@ public class World {
     private void loadInfo() {
 
         int x = 0;
-        int y = 80;
+        int y = GRID_SQUARE_SIZE*2;
 
 
         for (int i = 0; i < mapinfo.size(); i++) {
-            if (x >= mapwidth * 40) {
+            if (x >= mapwidth * GRID_SQUARE_SIZE) {
                 x = 0;
-                y += 40;
+                y += GRID_SQUARE_SIZE;
             }
             if (mapinfo.get(i) == '-') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
             }
             if (mapinfo.get(i) == 'x') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = true;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = true;
             }
             if (mapinfo.get(i) == 'c') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
                 mapitems.add(new Coin(x, y));
 
             }
             if (mapinfo.get(i) == 'e') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
 
-                Enemy enemy = new Enemy(x, y, this);
+                Enemy enemy = new Enemy(50, 10, 5, x, y, this);
 
                 enemies.add(enemy);
             }
             if (mapinfo.get(i) == 'w') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
 
                 Friend friend = new Friend(x, y, Friend.Actions.WALK);
 
                 friends.add(friend);
             }
             if (mapinfo.get(i) == 'i') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
 
                 Friend friend = new Friend(x, y, Friend.Actions.IDLE);
 
@@ -125,8 +122,8 @@ public class World {
 
             }
             if (mapinfo.get(i) == 's') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
 
                 Friend friend = new Friend(x, y, Friend.Actions.STAND);
 
@@ -134,47 +131,22 @@ public class World {
 
             }
             if (mapinfo.get(i) == 'm') {
-                mapcollision[i] = new Rectangle(x, y, 40, 40);
-                ismapSolid[i] = false;
+                mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+                mapSolid[i] = false;
 
                 mapitems.add(new CollectibleItem(x, y, "spideregg"));
             }
 
-            x += 40;
+            x += GRID_SQUARE_SIZE;
         }
-    }
-
-    private void loadQuests() {
-
-        //quest1
-        q001 = new Quest(50, 20, "Avenge Steven");
-        q001.addGoal(new Talk(friends.get(2)));
-        q001.addGoal(new Kill(enemies.get(0)));
-        q001.addGoal(new Talk(friends.get(2)));
-        friends.get(2).setQuest(q001);
-
-        //quest2
-        q002 = new Quest(100,40, "Collect 2x spider eggs");
-        q002.addGoal(new Talk(friends.get(0)));
-        q002.addGoal(new Collect(2, "spideregg"));
-        q002.addGoal(new Talk(friends.get(0)));
-        friends.get(0).setQuest(q002);
-
-    }
-
-    private void updateQuests() {
-
-        q001.update();
-        q002.update();
-
     }
 
     public void draw(Graphics2D g) {
 
         for (int i = 0; i < mapinfo.size(); i++) {
-            g.drawRect(mapcollision[i].x, mapcollision[i].y, 40, 40);
+            g.drawRect(mapCollision[i].x, mapCollision[i].y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
             if (mapinfo.get(i) == 'x') {
-                g.fillRect(mapcollision[i].x, mapcollision[i].y, 40, 40);
+                g.fillRect(mapCollision[i].x, mapCollision[i].y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
             }
         }
         for (int i = 0; i < mapitems.size(); i++) {
@@ -197,30 +169,30 @@ public class World {
 
     public void update() {
 
-        updateQuests();
+
 
     }
 
     public void panWorldXdir() {
 
         for (int i = 0; i < mapinfo.size(); i++) {
-            mapcollision[i].x += 800 * xDirection;
+            mapCollision[i].x += MAP_SECTION_WIDTH * xDirection;
         }
 
         for (int i = 0; i < mapitems.size(); i++) {
-            mapitems.get(i).moveX(800, xDirection);
+            mapitems.get(i).moveX(MAP_SECTION_WIDTH, xDirection);
 
         }
 
         for (int i = 0; i < enemies.size(); i++) {
 
-            enemies.get(i).moveX(800, xDirection);
+            enemies.get(i).moveX(MAP_SECTION_WIDTH, xDirection);
 
 
         }
         for (int i = 0; i < friends.size(); i++) {
 
-            friends.get(i).moveX(800, xDirection);
+            friends.get(i).moveX(MAP_SECTION_WIDTH, xDirection);
 
         }
 
@@ -229,44 +201,44 @@ public class World {
     public void panWorldYdir() {
 
         for (int i = 0; i < mapinfo.size(); i++) {
-            mapcollision[i].y += 400 * yDirection;
+            mapCollision[i].y += MAP_SECTION_HEIGHT * yDirection;
         }
 
         for (int i = 0; i < mapitems.size(); i++) {
 
-            mapitems.get(i).moveY(400, yDirection);
+            mapitems.get(i).moveY(MAP_SECTION_HEIGHT, yDirection);
 
         }
 
         for (int i = 0; i < enemies.size(); i++) {
 
-            enemies.get(i).moveY(400, yDirection);
+            enemies.get(i).moveY(MAP_SECTION_HEIGHT, yDirection);
 
         }
 
         for (int i = 0; i < friends.size(); i++) {
 
-            friends.get(i).moveY(400, yDirection);
+            friends.get(i).moveY(MAP_SECTION_HEIGHT, yDirection);
 
         }
 
     }
 
-    public void setXDirection(int d) {
-        xDirection = d;
+    public void setXDirection(int dir) {
+        xDirection = dir;
     }
 
-    public void setYDirection(int d) {
-        yDirection = d;
+    public void setYDirection(int dir) {
+        yDirection = dir;
     }
 
-    public ArrayList<Item> getItems() {
+    public java.util.List<Item> getItems() {
 
         return mapitems;
 
     }
 
-    public ArrayList<Enemy> getEnemies() {
+    public List<Enemy> getEnemies() {
 
         return enemies;
 
@@ -278,7 +250,7 @@ public class World {
 
     }
 
-    public ArrayList<Friend> getFriends() {
+    public List<Friend> getFriends() {
 
         return friends;
 
@@ -296,9 +268,21 @@ public class World {
 
     }
 
-    public String getMapname(){
+    public Rectangle getMapCollision(int pos){
 
-        return mapname;
+	return mapCollision[pos];
+
+    }
+
+    public boolean isMapSolid(int pos){
+
+	return mapSolid[pos];
+
+    }
+
+    public int getGridSquareSize(){
+
+	return GRID_SQUARE_SIZE;
 
     }
 

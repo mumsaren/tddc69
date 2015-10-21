@@ -9,16 +9,9 @@ package se.liu.ida.denlj069.tddc69.project;
  */
 public abstract class Goal {
 
-
-
     public abstract boolean isCompleted();
     public abstract String getType();
-    public String getName(){
 
-        return null;
-
-    }
-    public void decreaseAmount(){}
 
 
 }

@@ -2,7 +2,6 @@ package se.liu.ida.denlj069.tddc69.project;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,35 +14,39 @@ public class Enemy implements Runnable{
 
     private Rectangle enemyRect;
     private Rectangle detectRadius;
-    private int collisionboxradius = 4;
+    private final static int COLLISION_BOX_RADIUS = 4;
+    private final static int DETECTION_RADIUS_ORIGIN = 200;
+    private final static int DETECTION_RADIUS_WIDTH = 360;
+    private final static int DETECTION_RADIUS_HEIGHT = 360;
     private Rectangle player;
     private int xDirection, yDirection;
     private boolean alerted = false;
     private boolean resting = false;
     private World world;
     private Thread enemy;
-    private int health = 50;
+    private int health;
     private boolean alive;
     private int pwiX,pwiY = 0;
-    private int damage = 10;
-    private int expreward = 5;
+    private int damage;
+    private int expreward;
 
     private Image ENEMY_LEFT, ENEMY_RIGHT;
     private Image enemyimg;
 
 
-    public Enemy(int x, int y, World world){
+    public Enemy(int health, int damage, int expreward, int x, int y, World world){
 
         loadImages();
 
         enemyimg = ENEMY_LEFT;
-
+	this.health = health;
+	this.damage = damage;
+	this.expreward = expreward;
         enemyRect = new Rectangle(x, y, enemyimg.getWidth(null), enemyimg.getHeight(null));
-        detectRadius = new Rectangle(x-180+20, y-180+20, 360, 360);
+        detectRadius = new Rectangle(x-DETECTION_RADIUS_ORIGIN, y-DETECTION_RADIUS_ORIGIN,
+				     DETECTION_RADIUS_WIDTH, DETECTION_RADIUS_HEIGHT);
         this.world = world;
         alive = true;
-
-
 
     }
 
@@ -136,26 +139,7 @@ public class Enemy implements Runnable{
 
     public void draw(Graphics2D g){
 
-/*
-        int index;
-        for(int i = 0; i < collisionboxradius; i++){
-            for(int j = 0; j < collisionboxradius; j++) {
-                index = ((enemyRect.x - pwiX) / 40) - 1 + i
-                        + (((enemyRect.y - pwiY)/ 40) - 1 + j)* world.getMapWidth();
-                g.setColor(Color.red);
-                g.fillRect(world.mapcollision[index].x, world.mapcollision[index].y, world.mapcollision[index].width, world.mapcollision[index].height);
-            }
-        }
-
-*/
         g.drawImage(enemyimg, enemyRect.x, enemyRect.y, null);
-
-
-
-
-        //g.setComposite(AlphaComposite.SrcOver.derive(0.5f));
-        //g.fillRect(detectRadius.x, detectRadius.y, 360, 360);
-
 
     }
 
@@ -193,30 +177,17 @@ public class Enemy implements Runnable{
         temp.x += xDirection;
         temp.y += yDirection;
 
-        int index;
-        for(int i = 0; i < collisionboxradius; i++){
-            for(int j = 0; j < collisionboxradius; j++) {
-                index = ((temp.x - pwiX) / 40) - 1 + i
-                        + (((temp.y - pwiY) / 40) - 3 + j)* world.getMapWidth();
-                if(world.ismapSolid[index] && world.mapcollision[index].intersects(temp)){
+        for(int i = 0; i < COLLISION_BOX_RADIUS; i++){
+            for(int j = 0; j < COLLISION_BOX_RADIUS; j++) {
+                int collisionBoxIndex = ((temp.x - pwiX) / world.getGridSquareSize()) - 1 + i
+                        + (((temp.y - pwiY) / world.getGridSquareSize()) - 3 + j)* world.getMapWidth();
+                if(world.isMapSolid(collisionBoxIndex) && world.getMapCollision(collisionBoxIndex).intersects(temp)){
 
                     return false;
 
                 }
             }
         }
-        /*
-        for(int i = 0; i < world.getEnemies().size(); i++){
-
-           if(world.getEnemies().get(i).hits(enemyRect)){
-
-               return false;
-
-
-           }
-
-        }
-        */
 
         return true;
 
@@ -296,6 +267,12 @@ public class Enemy implements Runnable{
     public int getDamage(){
 
         return damage;
+
+    }
+
+    public int getExpreward(){
+
+	return expreward;
 
     }
 

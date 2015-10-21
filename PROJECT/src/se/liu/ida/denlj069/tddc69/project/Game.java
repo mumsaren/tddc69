@@ -30,8 +30,6 @@ public class Game extends JFrame {
 
         setVisible(true);
 
-
-
     }
 
     private void createMenus(){

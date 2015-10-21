@@ -26,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     private Player p1;
     private World world;
+    private QuestSystem qs;
     private HUD hud;
 
 
@@ -39,8 +40,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         world = new World("map");
         p1 = new Player(world);
-        hud = new HUD(p1);
-
+	qs = new QuestSystem(world,p1);
+        hud = new HUD(p1,qs);
 
         startGame();
 

@@ -86,7 +86,27 @@ public class Inventory {
 
     }
 
+    public boolean contains(int amount, String name){
 
+	for(int y = 0; y < rows; y++){
+
+	    for(int x = 0; x < columns; x++){
+
+		if(!isEmpty(x,y) && name.equals(array[y][x].getName())){
+
+		    amount--;
+
+		}
+
+
+	    }
+
+
+	}
+
+	return amount <= 0;
+
+    }
 
 
 

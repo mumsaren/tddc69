@@ -2,7 +2,8 @@ package se.liu.ida.denlj069.tddc69.project;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,44 +15,33 @@ import java.util.ArrayList;
 public class Player{
 
     private int xDirection, yDirection, speed, faceDirectionX, faceDirectionY;
-    private final int collisionboxradius = 4;
-
+    private static final int COLLISION_BOX_RADIUS = 4;
     private Rectangle playerRect;
     private Rectangle attackRadius;
-
-
     private World world;
-
     private Inventory inventory;
-
     private int health;
     private int cash;
     private int exp;
-
+    private final static int DAMAGE = 10;
+    private final static int FORCE = 50;
+    private final static int START_COORD_X = 160;
+    private final static int START_COORD_Y = 160;
+    private final static int TIME_ATTACKING = 700;
+    private final static int TIME_HURTED = 2000;
     private boolean hurted = false;
-
     private Image PLAYER_LEFT, PLAYER_RIGHT, PLAYER_FRONT, PLAYER_BACK,
                   PLAYER_PUNCHL, PLAYER_PUNCHR, PLAYER_PUNCHB, PLAYER_PUNCHF;
-
     private Image playerImg;
-
     private boolean attacking = false;
-    private boolean talking = false;
     private boolean moving = false;
     private boolean using = false;
-
-    private int damage = 10;
-    private int force = 50;
     private int hurtvalue = 0;
-
-    private boolean doingquest = false;
-    private Quest currentquest;
-    private ArrayList<Quest> completedquests;
-
     private long start;
-
     private int pwiX = 0;
     private int pwiY = 0;
+
+    private List<PlayerListener> playerListeners = new ArrayList<PlayerListener>();
 
 
     public Player(World world){
@@ -63,17 +53,14 @@ public class Player{
         exp = 0;
         speed = 4;
 
-
         inventory = new Inventory(5, 10);
 
         loadImages();
 
         playerImg = PLAYER_FRONT;
 
-        playerRect = new Rectangle(160, 160, playerImg.getWidth(null)*2, playerImg.getHeight(null)*2);
-        attackRadius = new Rectangle(160-9, 160-6, playerRect.width + 8, playerRect.height + 12);
-
-        completedquests = new ArrayList<Quest>();
+        playerRect = new Rectangle(START_COORD_X, START_COORD_Y, playerImg.getWidth(null)*2, playerImg.getHeight(null)*2);
+        attackRadius = new Rectangle(START_COORD_X-9, START_COORD_Y-6, playerRect.width + 8, playerRect.height + 12);
 
     }
 
@@ -92,25 +79,9 @@ public class Player{
 
     public void update(){
 
-
-        if(doingquest){
-
-            if(currentquest.isCompleted()){
-
-                cash += currentquest.getCashreward();
-                exp += currentquest.getExpreward();
-                doingquest = false;
-                completedquests.add(currentquest);
-
-            }
-
-
-        }
-
-
         if(attacking){
 
-            if(System.currentTimeMillis() >= start + 700){
+            if(System.currentTimeMillis() >= start + TIME_ATTACKING){
 
                 attacking = false;
                 setAnimation();
@@ -123,7 +94,7 @@ public class Player{
 
             if(hurted){
 
-                if(System.currentTimeMillis() >= start + 2000){
+                if(System.currentTimeMillis() >= start + TIME_HURTED){
 
                     hurted = false;
 
@@ -141,36 +112,20 @@ public class Player{
 
             checkCollisions();
 
-
             }
     }
 
     public void draw(Graphics2D g){
 
-
         if(hurted) {
 
+	    //Do not think it is necessary to make 0.7 a constant!
             g.setComposite(AlphaComposite.SrcOver.derive(0.7f));
 
         }
-/*
-        int index;
-        for(int i = 0; i < collisionboxradius; i++){
-            for(int j = 0; j < collisionboxradius; j++) {
-                index = ((playerRect.x + pwiX) / 40) - 1 + i
-                        + (((playerRect.y + pwiY) / 40) - 3 + j)* world.getMapWidth();
-                g.setColor(Color.red);
-                g.fillRect(world.mapcollision[index].x, world.mapcollision[index].y, world.mapcollision[index].width, world.mapcollision[index].height);
-            }
-        }
-
-*/
-
-
 
         g.drawImage(playerImg, playerRect.x, playerRect.y,
                     playerImg.getWidth(null)*2, playerImg.getHeight(null)*2, null);
-
 
     }
 
@@ -193,70 +148,83 @@ public class Player{
 
     private void checkCollisions(){
 
-        //Panorering av kartan
-        if(playerRect.x > 780){
+        checkPan();
+        checkCollisionObjects();
+        checkCollisionEnemies();
+	checkCollisionFriends();
 
-            world.panWorldXdir();
-            playerRect.x = 20;
-            attackRadius.x = 20;
-            pwiX += 800*xDirection;
+    }
 
-        }
-        if(playerRect.x < 20){
+    private void checkPan(){
 
-            world.panWorldXdir();
-            playerRect.x = 780;
-            attackRadius.x = 780;
-            pwiX += 800*xDirection;
+	//Panorering av kartan
+	if(playerRect.x > 780){
 
-        }
-        if(playerRect.y > 440){
+	    world.panWorldXdir();
+	    playerRect.x = 20;
+	    attackRadius.x = 20;
+	    pwiX += 800*xDirection;
 
-            world.panWorldYdir();
-            playerRect.y = 80;
-            attackRadius.y = 80;
-            pwiY += 400*yDirection;
+	}
+    	if(playerRect.x < 20){
 
-        }
-        if(playerRect.y < 80){
+	    world.panWorldXdir();
+	    playerRect.x = 780;
+	    attackRadius.x = 780;
+	    pwiX += 800*xDirection;
 
-            world.panWorldYdir();
-            playerRect.y = 420;
-            attackRadius.y = 420;
-            pwiY += 400*yDirection;
+	}
+	if(playerRect.y > 440){
 
+	    world.panWorldYdir();
+	    playerRect.y = 80;
+	    attackRadius.y = 80;
+	    pwiY += 400*yDirection;
 
-        }
-        //kolla kollision med föremål
-        for(int i = 0; i < world.getItems().size(); i++){
+	}
+	if(playerRect.y < 80){
 
-            Item item = world.getItems().get(i);
+	    world.panWorldYdir();
+	    playerRect.y = 420;
+	    attackRadius.y = 420;
+	    pwiY += 400*yDirection;
 
-            if(item.intersects(playerRect)){
+	}
 
-                if(item.getType().equals("collectible")){
+    }
 
-                    if(using){
-                        inventory.addItem(item);
-                        if(doingquest && item.getName().equals(currentquest.getCurrentCoal().getName())){
+    private void checkCollisionObjects(){
 
-                            currentquest.getCurrentCoal().decreaseAmount();
+	//kolla kollision med föremål
+	for(int i = 0; i < world.getItems().size(); i++){
 
-                        }
-                        world.removeItem(i);
-                    }
+	    Item item = world.getItems().get(i);
 
-                }
-                else if(item.getType().equals("coin")){
+	    if(item.intersects(playerRect)){
 
-                    world.removeItem(i);
-                    cash++;
+		if(item.getType().equals("collectible")){
 
-                }
-            }
+		    if(using){
+			inventory.addItem(item);
+			world.removeItem(i);
+			notifyListeners();
+		    }
 
-        }
-        //kollision med fiender
+		}
+		else if(item.getType().equals("coin")){
+
+		    world.removeItem(i);
+		    cash++;
+
+		}
+	    }
+
+	}
+
+    }
+
+    private void checkCollisionEnemies(){
+	//kollision med fiender
         for(int i = 0; i < world.getEnemies().size(); i++){
 
             Enemy enemy = world.getEnemies().get(i);
@@ -271,10 +239,13 @@ public class Player{
                    }
                    if(enemy.hits(attackRadius) && attacking){
                        if(enemy.isAlive()){
-                           enemy.hurt(damage, faceDirectionX, faceDirectionY, force);
+                           enemy.hurt(DAMAGE, faceDirectionX, faceDirectionY, FORCE);
                        }
                        else{
                            world.getEnemies().remove(i);
+			   exp += enemy.getExpreward();
+			   notifyListeners();
+
                        }
                    }
             }
@@ -283,11 +254,12 @@ public class Player{
                 world.getEnemies().get(i).notAlerted();
 
             }
-
-
         }
 
-        //kollision med vänner
+    }
+
+    private void checkCollisionFriends(){
+	//kollision med vänner
         for(int i = 0; i < world.getFriends().size(); i++){
 
             Friend friend = world.getFriends().get(i);
@@ -300,16 +272,8 @@ public class Player{
 
                     if(using){
 
-                        if(friend.hasQuest() && !friend.getQuest().isActive()){
-
-                            currentquest = friend.getQuest();
-                            currentquest.start();
-                            doingquest = true;
-
-                        }
-
                         friend.talk();
-                        talking = true;
+			notifyListeners();
 
                     }else{
 
@@ -324,8 +288,6 @@ public class Player{
                     friend.stopTalking();
 
                 }
-
-
 
             }else{
 
@@ -344,12 +306,11 @@ public class Player{
         temp.x += xDirection*speed;
         temp.y += yDirection*speed;
 
-        int index;
-        for(int i = 0; i < collisionboxradius; i++){
-            for(int j = 0; j < collisionboxradius; j++) {
-                index = ((temp.x + pwiX) / 40) - 1 + i
-                        + (((temp.y + pwiY) / 40) - 3 + j)* world.getMapWidth();
-                if(world.ismapSolid[index] && world.mapcollision[index].intersects(temp)){
+        for(int i = 0; i < COLLISION_BOX_RADIUS; i++){
+            for(int j = 0; j < COLLISION_BOX_RADIUS; j++) {
+                int collisionBoxIndex = ((temp.x + pwiX) / world.getGridSquareSize()) - 1 + i
+                        + (((temp.y + pwiY) / world.getGridSquareSize()) - 3 + j)* world.getMapWidth();
+                if(world.isMapSolid(collisionBoxIndex) && world.getMapCollision(collisionBoxIndex).intersects(temp)){
 
                     return false;
 
@@ -360,9 +321,9 @@ public class Player{
         return true;
     }
 
-    public void setSpeed(int s){
+    public void setSpeed(int speed){
 
-        speed = s;
+        this.speed = speed;
 
     }
 
@@ -476,12 +437,6 @@ public class Player{
 
     }
 
-    public boolean hasQuest(){
-
-        return doingquest;
-
-    }
-
     public boolean isDead(){
 
         return health == 0;
@@ -507,21 +462,37 @@ public class Player{
 
     }
 
-    public ArrayList<Quest> getCompletedquests(){
-
-        return completedquests;
-
-    }
-
-    public Quest getCurrentQuest(){
-
-        return currentquest;
-
-    }
-
     public Inventory getInventory(){
 
         return inventory;
+
+    }
+
+    public void addPlayerListener(PlayerListener pl){
+
+	playerListeners.add(pl);
+
+    }
+
+    private void notifyListeners(){
+
+	for(int i = 0; i < playerListeners.size(); i++){
+
+	    playerListeners.get(i).playerChanged();
+
+	}
+
+    }
+
+    public void giveCash(int cash){
+
+	this.cash += cash;
+
+    }
+
+    public void giveExp(int exp){
+
+	this.exp += exp;
 
     }
 }

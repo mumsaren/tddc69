@@ -1,6 +1,7 @@
 package se.liu.ida.denlj069.tddc69.project;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,14 +12,12 @@ import java.util.ArrayList;
  */
 public class Quest{
 
-    private boolean completed = false;
+    private boolean completed;
     private int cashreward;
     private int expreward;
-    private boolean active = false;
+    private boolean active;
     private String name;
-
-    private ArrayList<Goal> goals;
-
+    private List<Goal> goals;
 
     public Quest(int cashreward, int expreward, String name){
 
@@ -26,6 +25,8 @@ public class Quest{
         this.expreward = expreward;
         this.name = name;
         goals = new ArrayList<Goal>();
+	completed = false;
+	active = false;
 
     }
 
@@ -40,7 +41,7 @@ public class Quest{
 
         if(active){
 
-            if(!isCompleted()){
+            if(!completed){
                 checkGoals();
                 if(goals.isEmpty()){
 
@@ -60,9 +61,9 @@ public class Quest{
 
     private void checkGoals(){
 
-        if(getCurrentCoal().isCompleted()){
+        if(getCurrentGoal().isCompleted()){
 
-            System.out.println(getCurrentCoal().getType());
+            System.out.println(getCurrentGoal().getType());
             System.out.println("goal completed");
 
             goals.remove(0);
@@ -83,7 +84,7 @@ public class Quest{
 
     }
 
-    public Goal getCurrentCoal(){
+    public Goal getCurrentGoal(){
 
         if(!goals.isEmpty()){
             return goals.get(0);
