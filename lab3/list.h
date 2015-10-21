@@ -1,0 +1,67 @@
+class List
+{
+    public:
+        List();                    // defaultkonstruktor
+        List(const List& other);   // kopieringskonstruktor
+        ~List();                   // destruktor
+        List& operator=(List& rhs);// kopieringstilldelningsoperator
+        void insert_sorted(const int value);
+        void swap(List& other);
+        int len() const;
+        int get(const int pos) const;
+    private:
+        class List_Node* first_node;
+        int length;
+        class List_Node* copy(const class List_Node* p) const;
+};
+
+class List_Node
+{
+    public:
+        virtual ~List_Node();
+        virtual List_Node* insert_sorted(const int value) = 0;
+        virtual List_Node* clone() const = 0;
+        virtual int get(const int pos) const = 0;
+    protected:
+        List_Node();
+    private:
+        // Annan kopiering än med clone() är ej tillåten,
+        // så vi deklarerar en privat kopieringskonstruktor
+        // och kopieringstilldelningsoperator utan att
+        // ge dem någon implementation.
+        List_Node(const List_Node&);
+        List_Node& operator=(const List_Node&);
+};
+
+class Int_Node : public List_Node
+{
+    public:
+        Int_Node(const int value, List_Node* next);
+        ~Int_Node();
+        virtual Int_Node* insert_sorted(const int value);
+        virtual Int_Node* clone() const;
+        virtual int get(const int pos) const;
+    private:
+        // Annan kopiering än med clone() är ej tillåten
+        // (som för List_Node)
+        Int_Node(const Int_Node&);
+        Int_Node& operator=(const Int_Node&);
+
+        // Medlemsvariablerna är privata
+        int node_value;
+        List_Node* next_node;
+};
+
+class End_Node : public List_Node
+{
+    public:
+        End_Node();
+        virtual Int_Node* insert_sorted(const int value);
+        virtual End_Node* clone() const;
+        virtual int get(const int pos) const;
+    private:
+        // Annan kopiering än med clone() är ej tillåten
+        // (som för List_Node)
+        End_Node(const End_Node&);
+        End_Node& operator=(const End_Node&);
+};

@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         if(gameover){
 
-            g2d.setComposite(AlphaComposite.SrcOver.derive(1f));
+            g2d.setComposite(AlphaComposite.SrcOver.derive(1.0f));
 
             g2d.setColor(Color.BLACK);
             g2d.setFont(new Font("Arial", Font.BOLD, GAME_OVER_FONT_SIZE));

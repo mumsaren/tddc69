@@ -72,12 +72,6 @@ public class Quest{
 
     }
 
-    public boolean isActive(){
-
-        return active;
-
-    }
-
     public void addGoal(Goal goal){
 
         goals.add(goal);

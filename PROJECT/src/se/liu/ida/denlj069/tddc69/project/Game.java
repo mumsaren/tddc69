@@ -14,11 +14,9 @@ import java.awt.event.ActionListener;
 
 public class Game extends JFrame {
 
-    GamePanel gp;
-
     public Game(){
 
-        gp = new GamePanel();
+        GamePanel gp = new GamePanel();
         setTitle("RPG 1.0");
         setSize(gp.getPreferredSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,11 +34,11 @@ public class Game extends JFrame {
 
         final JMenu game = new JMenu("Game");
         JMenuItem newgamebutton = new JMenuItem("New Game");
-        newgamebutton.addActionListener(new newGameListener());
+        newgamebutton.addActionListener(new GameListener());
         game.add(newgamebutton);
         game.addSeparator();
         JMenuItem exitgamebutton = new JMenuItem("Exit");
-        exitgamebutton.addActionListener(new exitGameListener());
+        exitgamebutton.addActionListener(new ExitGameListener());
         game.add(exitgamebutton);
 
         final JMenuBar bar = new JMenuBar();
@@ -51,7 +49,7 @@ public class Game extends JFrame {
 
     }
 
-    public class newGameListener implements ActionListener{
+    public class GameListener implements ActionListener{
 
         public void actionPerformed(ActionEvent event){
 
@@ -66,7 +64,7 @@ public class Game extends JFrame {
 
     }
 
-    public class exitGameListener implements ActionListener{
+    public class ExitGameListener implements ActionListener{
 
         public void actionPerformed(ActionEvent event){
 

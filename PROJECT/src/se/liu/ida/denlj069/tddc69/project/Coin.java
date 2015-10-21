@@ -1,7 +1,5 @@
 package se.liu.ida.denlj069.tddc69.project;
 
-import java.awt.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mumsaren
@@ -10,8 +8,6 @@ import java.awt.*;
  * To change this template use File | Settings | File Templates.
  */
 public class Coin extends Item {
-
-    private int value;
 
     public Coin(int x, int y){
 

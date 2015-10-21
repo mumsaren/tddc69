@@ -33,20 +33,20 @@ public class Enemy{
     private int expreward;
     private long start;
 
-    private Image ENEMY_LEFT, ENEMY_RIGHT;
-    private Image enemyimg;
+    private Image enemyLeft, enemyRight;
+    private Image enemyImg;
 
 
     public Enemy(int health, int damage, int speed, int expreward, int x, int y, World world){
 
         loadImages();
 
-        enemyimg = ENEMY_LEFT;
+        enemyImg = enemyLeft;
 	this.health = health;
 	this.damage = damage;
 	this.speed = speed;
 	this.expreward = expreward;
-        enemyRect = new Rectangle(x, y, enemyimg.getWidth(null), enemyimg.getHeight(null));
+        enemyRect = new Rectangle(x, y, enemyImg.getWidth(null), enemyImg.getHeight(null));
         detectRadius = new Rectangle(x-DETECTION_RADIUS_ORIGIN, y-DETECTION_RADIUS_ORIGIN,
 				     DETECTION_RADIUS_WIDTH, DETECTION_RADIUS_HEIGHT);
         this.world = world;
@@ -56,8 +56,8 @@ public class Enemy{
 
     private void loadImages(){
 
-        ENEMY_LEFT = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Monster/spidermonsterL.png").getImage();
-        ENEMY_RIGHT = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Monster/spidermonsterR.png").getImage();
+        enemyLeft = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Monster/spidermonsterL.png").getImage();
+        enemyRight = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Monster/spidermonsterR.png").getImage();
 
 
     }
@@ -148,7 +148,7 @@ public class Enemy{
 
     public void draw(Graphics2D g){
 
-        g.drawImage(enemyimg, enemyRect.x, enemyRect.y, null);
+        g.drawImage(enemyImg, enemyRect.x, enemyRect.y, null);
 
     }
 
@@ -260,12 +260,12 @@ public class Enemy{
 
         if(xDirection == 1){
 
-            enemyimg = ENEMY_RIGHT;
+            enemyImg = enemyRight;
 
         }
         if(xDirection == -1){
 
-            enemyimg = ENEMY_LEFT;
+            enemyImg = enemyLeft;
 
         }
 

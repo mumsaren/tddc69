@@ -14,10 +14,12 @@ public abstract class Item {
 
     private Rectangle itemRect;
     private Image itemImg;
+    private static final int ITEM_RECT_WIDTH = 20;
+    private static final int ITEM_RECT_HEIGHT = 20;
 
     public Item(int x, int y, String imgName){
 
-        itemRect = new Rectangle(x, y, 20, 20);
+        itemRect = new Rectangle(x, y, ITEM_RECT_WIDTH, ITEM_RECT_HEIGHT);
         loadImage(imgName);
 
     }

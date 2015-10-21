@@ -14,8 +14,6 @@ public class QuestSystem implements PlayerListener
     private Quest currentQuest;
     private Map<Friend, Quest> questGivers;
     private List<Quest> completedQuests;
-    private Quest q001,q002;
-
 
     public QuestSystem(World world, Player player){
 
@@ -32,14 +30,14 @@ public class QuestSystem implements PlayerListener
     private void loadQuests(){
 
 	//quest1
-	q001 = new Quest(50, 20, "Avenge Steven");
+	Quest q001 = new Quest(50, 20, "Avenge Steven");
 	q001.addGoal(new Talk(world.getFriends().get(2)));
 	q001.addGoal(new Kill(world.getEnemies().get(0)));
 	q001.addGoal(new Talk(world.getFriends().get(2)));
 	questGivers.put(world.getFriends().get(2), q001);
 
 	//quest2
-	q002 = new Quest(100,40, "Collect 2x spider eggs");
+	Quest q002 = new Quest(100,40, "Collect 2x spider eggs");
 	q002.addGoal(new Talk(world.getFriends().get(0)));
 	q002.addGoal(new Collect(2, "spideregg", player.getInventory()));
 	q002.addGoal(new Talk(world.getFriends().get(0)));
@@ -51,11 +49,11 @@ public class QuestSystem implements PlayerListener
 
 	if(!doingQuest){
 
-	    for(Friend friend : questGivers.keySet()){
+	    for(final Map.Entry<Friend, Quest> friendQuestEntry : questGivers.entrySet()){
 
-		if(friend.isTalking()){
+		if(friendQuestEntry.getKey().isTalking()){
 
-		    currentQuest = questGivers.get(friend);
+		    currentQuest = friendQuestEntry.getValue();
 		    currentQuest.start();
 		    doingQuest = true;
 		    currentQuest.update();

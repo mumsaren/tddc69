@@ -301,4 +301,10 @@ public class World {
 
     }
 
+    public int getMapSectionHeight(){
+
+	return MAP_SECTION_HEIGHT;
+
+    }
+
 }

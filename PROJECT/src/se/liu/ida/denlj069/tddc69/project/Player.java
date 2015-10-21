@@ -16,6 +16,12 @@ public class Player{
 
     private int xDirection, yDirection, speed, faceDirectionX, faceDirectionY;
     private static final int COLLISION_BOX_RADIUS = 4;
+    private static final int ATTACK_BOX_ORIGIN_X = 9;
+    private static final int ATTACK_BOX_ORIGIN_Y = 6;
+    private static final int ATTACK_BOX_WIDTH = 8;
+    private static final int ATTACK_BOX_HEIGHT = 12;
+    private static final int PAN_START_COORD_X = 20;
+    private static final int PAN_START_COORD_Y = 40;
     private Rectangle playerRect;
     private Rectangle attackRadius;
     private World world;
@@ -30,8 +36,8 @@ public class Player{
     private final static int TIME_ATTACKING = 700;
     private final static int TIME_HURTED = 2000;
     private boolean hurted = false;
-    private Image PLAYER_LEFT, PLAYER_RIGHT, PLAYER_FRONT, PLAYER_BACK,
-                  PLAYER_PUNCHL, PLAYER_PUNCHR, PLAYER_PUNCHB, PLAYER_PUNCHF;
+    private Image playerLeft, playerRight, playerFront, playerBack,
+                  playerPunchLeft, playerPunchRight, playerPunchFront, playerPunchBack;
     private Image playerImg;
     private boolean attacking = false;
     private boolean moving = false;
@@ -56,23 +62,24 @@ public class Player{
 
         loadImages();
 
-        playerImg = PLAYER_FRONT;
+        playerImg = playerFront;
 
         playerRect = new Rectangle(START_COORD_X, START_COORD_Y, playerImg.getWidth(null)*2, playerImg.getHeight(null)*2);
-        attackRadius = new Rectangle(START_COORD_X-9, START_COORD_Y-6, playerRect.width + 8, playerRect.height + 12);
+        attackRadius = new Rectangle(START_COORD_X-ATTACK_BOX_ORIGIN_X, START_COORD_Y-ATTACK_BOX_ORIGIN_Y,
+				     playerRect.width + ATTACK_BOX_WIDTH, playerRect.height + ATTACK_BOX_HEIGHT);
 
     }
 
     private void loadImages(){
 
-        PLAYER_LEFT = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerLS.png").getImage();
-        PLAYER_RIGHT = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerRS.png").getImage();
-        PLAYER_BACK = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerBS.png").getImage();
-        PLAYER_FRONT = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerFS.png").getImage();
-        PLAYER_PUNCHL = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchLS.png").getImage();
-        PLAYER_PUNCHR = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchRS.png").getImage();
-        PLAYER_PUNCHB = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchBSR.png").getImage();
-        PLAYER_PUNCHF = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchFSR.png").getImage();
+        playerLeft = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerLS.png").getImage();
+        playerRight = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerRS.png").getImage();
+        playerBack = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerBS.png").getImage();
+        playerFront = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerFS.png").getImage();
+        playerPunchLeft = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchLS.png").getImage();
+        playerPunchRight = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchRS.png").getImage();
+        playerPunchBack = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchBSR.png").getImage();
+        playerPunchFront = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchFSR.png").getImage();
 
     }
 
@@ -157,36 +164,36 @@ public class Player{
     private void checkPan(){
 
 	//Panorering av kartan
-	if(playerRect.x > 780){
+	if(playerRect.x > world.getMapSectionWidth() - PAN_START_COORD_X){
 
 	    world.panWorldXdir();
-	    playerRect.x = 20;
-	    attackRadius.x = 20;
-	    pwiX += 800*xDirection;
+	    playerRect.x = PAN_START_COORD_X;
+	    attackRadius.x = PAN_START_COORD_X;
+	    pwiX += world.getMapSectionWidth()*xDirection;
 
 	}
-    	if(playerRect.x < 20){
+    	if(playerRect.x < PAN_START_COORD_X){
 
 	    world.panWorldXdir();
-	    playerRect.x = 780;
-	    attackRadius.x = 780;
-	    pwiX += 800*xDirection;
+	    playerRect.x = world.getMapSectionWidth() - PAN_START_COORD_X;
+	    attackRadius.x = world.getMapSectionWidth() - PAN_START_COORD_X;
+	    pwiX += world.getMapSectionWidth()*xDirection;
 
 	}
-	if(playerRect.y > 440){
+	if(playerRect.y > world.getMapSectionHeight() + PAN_START_COORD_Y){
 
 	    world.panWorldYdir();
-	    playerRect.y = 80;
-	    attackRadius.y = 80;
-	    pwiY += 400*yDirection;
+	    playerRect.y = PAN_START_COORD_Y;
+	    attackRadius.y = PAN_START_COORD_Y;
+	    pwiY += world.getMapSectionHeight()*yDirection;
 
 	}
-	if(playerRect.y < 80){
+	if(playerRect.y < PAN_START_COORD_Y){
 
 	    world.panWorldYdir();
-	    playerRect.y = 420;
-	    attackRadius.y = 420;
-	    pwiY += 400*yDirection;
+	    playerRect.y = world.getMapSectionHeight() + PAN_START_COORD_Y;
+	    attackRadius.y = world.getMapSectionHeight() + PAN_START_COORD_Y;
+	    pwiY += world.getMapSectionHeight()*yDirection;
 
 	}
 
@@ -337,23 +344,23 @@ public class Player{
 
             if(faceDirectionX == 1){
 
-                playerImg = PLAYER_PUNCHR;
+                playerImg = playerPunchRight;
 
             }
             if(faceDirectionX == -1){
 
-                playerImg = PLAYER_PUNCHL;
+                playerImg = playerPunchLeft;
 
 
             }
             if(faceDirectionY == -1){
 
-                playerImg = PLAYER_PUNCHB;
+                playerImg = playerPunchBack;
 
             }
             if(faceDirectionY == 1){
 
-                playerImg = PLAYER_PUNCHF;
+                playerImg = playerPunchFront;
 
             }
 
@@ -366,22 +373,22 @@ public class Player{
 
         if(faceDirectionX == 1){
 
-            playerImg = PLAYER_RIGHT;
+            playerImg = playerRight;
 
         }
         if(faceDirectionX == -1){
 
-            playerImg = PLAYER_LEFT;
+            playerImg = playerLeft;
 
         }
         if(faceDirectionY == 1){
 
-           playerImg = PLAYER_FRONT;
+           playerImg = playerFront;
 
         }
         if(faceDirectionY == -1){
 
-            playerImg = PLAYER_BACK;
+            playerImg = playerBack;
 
         }
 

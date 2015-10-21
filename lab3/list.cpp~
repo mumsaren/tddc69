@@ -1,0 +1,13 @@
+// Vi behöver klassdeklarationerna...
+#include "list.h"
+// ...och standardfunktioner för I/O med mera
+#include <iostream>
+#include <algorithm>
+
+// Vi behöver använda saker från namnrymden std
+using namespace std;
+
+List::List() :
+    first_node(new End_Node()), length(0)
+{}
+

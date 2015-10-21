@@ -14,8 +14,12 @@ public class Inventory {
 
     private Item[][] array;
     private int rows, columns;
-    private int slotSize, xpos, ypos;
-    private Image inventoryimg;
+    private static final int X_SPACING = 20;
+    private static final int Y_SPACING = 140;
+    private static final int SLOT_SIZE = 40;
+    private static final int IMG_X = 0;
+    private static final int IMG_Y = 80;
+    private Image inventoryImg;
 
 
     public Inventory(int rows, int columns){
@@ -23,16 +27,13 @@ public class Inventory {
         this.rows = rows;
         this.columns = columns;
         array = new Item[rows][columns];
-        slotSize = 40;
-        xpos = 20;
-        ypos = 140;
         loadImages();
 
     }
 
     private void loadImages(){
 
-        inventoryimg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/Inventory.png").getImage();
+        inventoryImg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/Inventory.png").getImage();
 
 
     }
@@ -44,10 +45,8 @@ public class Inventory {
               for(int x = 0; x < columns; x++){
 
                   if(isEmpty(x,y)){
-
-                      //System.out.println(x + "  " + y);
-                      item.setX(x*slotSize + xpos);
-                      item.setY(y*slotSize + ypos);
+                      item.setX(x*SLOT_SIZE + X_SPACING);
+                      item.setY(y*SLOT_SIZE + Y_SPACING);
                       array[y][x] = item;
                       return;
 
@@ -61,7 +60,7 @@ public class Inventory {
 
     public void draw(Graphics2D g){
 
-        g.drawImage(inventoryimg, 0, 80, null);
+        g.drawImage(inventoryImg, IMG_X, IMG_Y, null);
 
         for(int y = 0; y < rows; y++){
 

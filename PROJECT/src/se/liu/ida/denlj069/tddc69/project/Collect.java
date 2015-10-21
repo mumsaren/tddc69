@@ -1,8 +1,5 @@
 package se.liu.ida.denlj069.tddc69.project;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by mumsaren on 2015-02-01.
  */
