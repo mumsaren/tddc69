@@ -34,7 +34,10 @@ public class GamePanel extends JPanel implements Runnable{
     private World world;
     private HUD hud;
 
-
+    /**
+     * Sets up necessary window parameters, creates the main game objects and starts
+     * the game flow
+     */
     public GamePanel(){
 
         addKeyListener(new ActionListener());
@@ -55,12 +58,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void run(){
 
+	//While loop spins on field cause needed
         while(running){
             if(!pause){
                 update();
                 repaint();
             }
             try {
+		//This is for setting game speed, busy-waiting is inevitable
                 Thread.sleep(GAME_SPEED);
             } catch (InterruptedException e) {
 
@@ -122,16 +127,16 @@ public class GamePanel extends JPanel implements Runnable{
 
     public class ActionListener extends KeyAdapter {
 
+	//Don't know how to fix
         public void keyPressed(KeyEvent e){
             int key = e.getKeyCode();
-            if(key == e.VK_LEFT){
+            if(key == KeyEvent.VK_LEFT){
 
                 p1.setxDirection(-1);
                 world.setXDirection(1);
 
-
             }
-            if(key == e.VK_RIGHT){
+            if(key == KeyEvent.VK_RIGHT){
 
 
                 p1.setxDirection(1);
@@ -139,42 +144,42 @@ public class GamePanel extends JPanel implements Runnable{
 
 
             }
-            if(key == e.VK_UP){
+            if(key == KeyEvent.VK_UP){
 
                 p1.setyDirection(-1);
                 world.setYDirection(1);
 
             }
-            if(key == e.VK_DOWN){
+            if(key == KeyEvent.VK_DOWN){
 
                 p1.setyDirection(1);
                 world.setYDirection(-1);
 
 
             }
-            if(key == e.VK_I){
+            if(key == KeyEvent.VK_I){
 
                 hud.display(HUD.ShowStuff.INVENTORY);
                 pause();
 
             }
-            if(key == e.VK_SHIFT){
+            if(key == KeyEvent.VK_SHIFT){
 
                 p1.setSpeed(10);
 
             }
-            if(key == e.VK_C){
+            if(key == KeyEvent.VK_C){
 
                 p1.attack();
 
 
             }
-            if(key == e.VK_X){
+            if(key == KeyEvent.VK_X){
 
                 p1.use();
 
             }
-            if(key == e.VK_Q){
+            if(key == KeyEvent.VK_Q){
 
                 hud.display(HUD.ShowStuff.QUESTS);
                 pause();
@@ -183,19 +188,20 @@ public class GamePanel extends JPanel implements Runnable{
 
 
         }
+	//Don't know how to fix
         public void keyReleased(KeyEvent e){
             int key = e.getKeyCode();
-            if(key == e.VK_LEFT || key == e.VK_RIGHT || key == e.VK_UP ||key == e.VK_DOWN){
+            if(key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP ||key == KeyEvent.VK_DOWN){
 
                 p1.stopMove();
 
             }
-            if(key == e.VK_SHIFT){
+            if(key == KeyEvent.VK_SHIFT){
 
                 p1.setSpeed(4);
 
             }
-            if(key == e.VK_X){
+            if(key == KeyEvent.VK_X){
 
                 p1.stopUse();
 
@@ -205,6 +211,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
+    //Don't know how to fix
     public Dimension getPreferredSize(){
 
         return GAME_DIM;
@@ -215,16 +222,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         repaint();
 
-        if(pause){
-
-            pause = false;
-
-        }
-        else{
-
-            pause = true;
-
-        }
+	pause = !pause;
 
     }
 

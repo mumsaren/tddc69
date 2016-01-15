@@ -16,6 +16,11 @@ public class Coin extends Item
 
     }
 
+    public String getName(){
+
+	return null;
+
+    }
 
     public String getType(){
 

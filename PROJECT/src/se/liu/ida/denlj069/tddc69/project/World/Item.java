@@ -13,11 +13,11 @@ import javax.swing.*;
 public abstract class Item {
 
     private Rectangle itemRect;
-    private Image itemImg;
+    private Image itemImg; //It gets initialized
     private static final int ITEM_RECT_WIDTH = 20;
     private static final int ITEM_RECT_HEIGHT = 20;
 
-    public Item(int x, int y, String imgName){
+    protected Item(int x, int y, String imgName){
 
         itemRect = new Rectangle(x, y, ITEM_RECT_WIDTH, ITEM_RECT_HEIGHT);
         loadImage(imgName);
@@ -69,11 +69,7 @@ public abstract class Item {
 
     public abstract String getType();
 
-    public String getName(){
-
-        return null;
-
-    }
+    public abstract String getName();
 
 
 }

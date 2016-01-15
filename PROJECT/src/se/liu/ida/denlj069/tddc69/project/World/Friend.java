@@ -31,7 +31,7 @@ public class Friend {
 
     public enum Actions{
 
-        WALK, IDLE, STAND;
+        WALK, IDLE, STAND
 
     }
 
@@ -61,6 +61,7 @@ public class Friend {
 	if(active){
 	    if(!talking){
 		if(!resting){
+		    //Personally thinks it looks better with a switch case
 		    switch(action){
 
 			case WALK:

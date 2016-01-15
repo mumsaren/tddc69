@@ -20,7 +20,7 @@ public class Enemy{
     private final static int DETECTION_RADIUS_HEIGHT = 360;
     private final static int ATTACKING_TIME = 1000;
     private final static int RESTING_TIME = 2000;
-    private Rectangle player;
+    private Rectangle player; //gets initialized when noticed by enemy
     private int xDirection, yDirection;
     private boolean alerted = false;
     private boolean resting = false;

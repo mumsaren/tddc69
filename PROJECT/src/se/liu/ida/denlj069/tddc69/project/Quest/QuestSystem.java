@@ -14,7 +14,7 @@ public class QuestSystem implements PlayerListener
     private World world;
     private Player player;
     private boolean doingQuest;
-    private Quest currentQuest;
+    private Quest currentQuest; //gets initialized when quest is started
     private Map<Friend, Quest> questGivers;
     private List<Quest> completedQuests;
 

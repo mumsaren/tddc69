@@ -69,7 +69,7 @@ public class HUD{
 
     public enum ShowStuff{
 
-        INVENTORY, QUESTS, NULL;
+        INVENTORY, QUESTS, NULL
 
     }
 

@@ -19,6 +19,8 @@ public class World {
     private final static int GRID_SQUARE_SIZE = 40;
     private final static int MAP_SECTION_WIDTH = 800;
     private final static int MAP_SECTION_HEIGHT = 400;
+    private final static char[] MAP_BUILDING_BLOCKS = {'-', 'x', 'c', 'e', 'w',
+    							'i','s', 'm'};
     private Rectangle[] mapCollision;
     private boolean[] mapSolid;
     private int mapWidth;
@@ -32,12 +34,7 @@ public class World {
         this.mapName = mapName;
 	mapInfo = new ArrayList<Character>();
 
-        try {
-            loadMap();
-        } catch (IOException e) {
-            System.out.println("ERROR WHEN LOADING MAP");
-            e.printStackTrace();
-        }
+	loadMap();
 
         mapCollision = new Rectangle[mapInfo.size()];
         mapSolid = new boolean[mapInfo.size()];
@@ -49,25 +46,46 @@ public class World {
 
     }
 
-    private void loadMap() throws IOException {
+    private void loadMap() {
 
-        BufferedReader infile = new BufferedReader
-                (new FileReader("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/World/" + mapName + ".txt"));
+	BufferedReader infile = null;
+	try {
+	    //Why should it be opened in front???
+	    infile = new BufferedReader
+		    (new FileReader("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/World/" + mapName + ".txt"));
+	} catch (FileNotFoundException e) {
+	    System.out.println("ERROR WHEN LOADING MAP");
+	    e.printStackTrace();
+	}
 
-        char c;
+	char c;
         int counter = 0;
 
-        while ((c = (char) infile.read()) != 'E') {
-            counter++;
-            if (c == 'R') {
-                mapWidth = counter - 1;
-            }else if (c == '-' || c == 'x' || c == 'c' || c == 'e' || c == 'w'
-                    || c == 'i' || c == 's' || c == 'm') {
-                mapInfo.add(c);
-            }
-        }
+	try {
+	    assert infile != null;
+	    while ((c = (char) infile.read()) != 'E') {
+		counter++;
+		if (c == 'R') {
+		    mapWidth = counter - 1;
+		}else {
+		    for(char block : MAP_BUILDING_BLOCKS){
+			if(c == block){
+			    mapInfo.add(c);
+			}
+		    }
+		}
+	    }
+	} catch (IOException e) {
+	    System.out.println("ERROR WHEN READING MAP");
+	    e.printStackTrace();
+	}
 
-        infile.close();
+	try {
+	    infile.close();
+	} catch (IOException e) {
+	    System.out.println("ERROR WHEN CLOSING MAP");
+	    e.printStackTrace();
+	}
 
     }
 

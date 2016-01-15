@@ -20,8 +20,6 @@ public class CollectibleItem extends Item
 
     }
 
-
-    @Override
     public String getName(){
 
         return name;
