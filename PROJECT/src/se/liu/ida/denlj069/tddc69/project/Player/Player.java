@@ -74,14 +74,14 @@ public class Player{
 
     private void loadImages(){
 
-        playerLeft = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerLS.png").getImage();
-        playerRight = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerRS.png").getImage();
-        playerBack = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerBS.png").getImage();
-        playerFront = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/playerFS.png").getImage();
-        playerPunchLeft = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchLS.png").getImage();
-        playerPunchRight = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchRS.png").getImage();
-        playerPunchBack = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchBSR.png").getImage();
-        playerPunchFront = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/Player/punchFSR.png").getImage();
+        playerLeft = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "playerLS.png").getImage();
+        playerRight = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "playerRS.png").getImage();
+        playerBack = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "playerBS.png").getImage();
+        playerFront = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "playerFS.png").getImage();
+        playerPunchLeft = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/"+ "punchLS.png").getImage();
+        playerPunchRight = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "punchRS.png").getImage();
+        playerPunchBack = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "punchBSR.png").getImage();
+        playerPunchFront = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/Player/" + "punchFSR.png").getImage();
 
     }
 
@@ -159,7 +159,7 @@ public class Player{
         checkPan();
         checkCollisionObjects();
         checkCollisionEnemies();
-	checkCollisionFriends();
+	    checkCollisionFriends();
 
     }
 

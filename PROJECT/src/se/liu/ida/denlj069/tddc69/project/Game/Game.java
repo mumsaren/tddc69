@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
+ * The Game window class.
+ *
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-09
@@ -16,8 +19,6 @@ public class Game extends JFrame {
 
     /**
      * Sets upp the game window and creates the GamePanel object
-     * - the main game object which will be drawn in the game
-     * window.
      */
     public Game(){
 

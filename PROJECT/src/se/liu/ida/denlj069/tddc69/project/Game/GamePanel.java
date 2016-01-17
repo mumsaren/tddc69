@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import static se.liu.ida.denlj069.tddc69.project.Player.HUD.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mumsaren
@@ -173,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
             if(key == KeyEvent.VK_I){
 
-                hud.display(HUD.ShowStuff.INVENTORY);
+                hud.display(ShowStuff.INVENTORY);
                 pause();
 
             }
@@ -195,7 +197,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
             if(key == KeyEvent.VK_Q){
 
-                hud.display(HUD.ShowStuff.QUESTS);
+                hud.display(ShowStuff.QUESTS);
                 pause();
 
             }

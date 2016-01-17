@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+import static se.liu.ida.denlj069.tddc69.project.World.Friend.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mumsaren
@@ -32,9 +34,9 @@ public class World {
     public World(String mapName) {
 
         this.mapName = mapName;
-	mapInfo = new ArrayList<Character>();
+	    mapInfo = new ArrayList<Character>();
 
-	loadMap();
+	    loadMap();
 
         mapCollision = new Rectangle[mapInfo.size()];
         mapSolid = new boolean[mapInfo.size()];
@@ -52,18 +54,17 @@ public class World {
 	try {
 	    //Why should it be opened in front???
 	    infile = new BufferedReader
-		    (new FileReader("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/World/" + mapName + ".txt"));
+		    (new FileReader("./src/se/liu/ida/denlj069/tddc69/project/World/" + mapName + ".txt"));
 	} catch (FileNotFoundException e) {
 	    System.out.println("ERROR WHEN LOADING MAP");
 	    e.printStackTrace();
 	}
 
-	char c;
-        int counter = 0;
-
 	try {
 	    assert infile != null;
-	    while ((c = (char) infile.read()) != 'E') {
+        char c;
+        int counter = 0;
+        while ((c = (char) infile.read()) != 'E') {
 		counter++;
 		if (c == 'R') {
 		    mapWidth = counter - 1;
@@ -126,7 +127,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, 1, Friend.Actions.WALK);
+                Friend friend = new Friend(x, y, 1, Actions.WALK);
 
                 friends.add(friend);
             }
@@ -134,7 +135,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, 2, Friend.Actions.IDLE);
+                Friend friend = new Friend(x, y, 2, Actions.IDLE);
 
                 friends.add(friend);
 
@@ -143,7 +144,7 @@ public class World {
                 mapCollision[i] = new Rectangle(x, y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
                 mapSolid[i] = false;
 
-                Friend friend = new Friend(x, y, 1, Friend.Actions.STAND);
+                Friend friend = new Friend(x, y, 1, Actions.STAND);
 
                 friends.add(friend);
 
