@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 public class Game extends JFrame {
 
     /**
-     * Sets upp the game window and creates the GamePanel object,
-     * the main game object which will be drawn in the game
+     * Sets upp the game window and creates the GamePanel object
+     * - the main game object which will be drawn in the game
      * window.
      */
     public Game(){

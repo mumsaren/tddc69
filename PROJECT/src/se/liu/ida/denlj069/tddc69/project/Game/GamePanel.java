@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     /**
      * Sets up necessary window parameters, creates the main game objects and starts
-     * the game flow
+     * the main game thread
      */
     public GamePanel(){
 
@@ -53,9 +53,12 @@ public class GamePanel extends JPanel implements Runnable{
 
         startGame();
 
-
     }
 
+    /**
+     * The main game thread. Updates and repaints the game window while game is running
+     * and not paused.
+     */
     public void run(){
 
 	//While loop spins on field cause needed
@@ -76,6 +79,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
+    /**
+     * The update method called from the main thread, updates the player first
+     * (unless the player is dead) and then the world.
+     */
     private void update(){
 
         p1.update();
@@ -89,13 +96,15 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
+    /**
+     * The main draw method. Sends graphic object to world, p1 and hud.
+     */
     @Override
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D)g;
-
 
         world.draw(g2d);
         p1.draw(g2d);
@@ -111,10 +120,11 @@ public class GamePanel extends JPanel implements Runnable{
 
         }
 
-
     }
 
-
+    /**
+     * Starts the main thread.
+     */
     private void startGame(){
         if(!running){
 
@@ -125,6 +135,10 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Event handler for checking actions performed by user (pressed keyboard buttons).
+     * It calls public methods in player, world and hud when certain buttons is pressed.
+     */
     public class ActionListener extends KeyAdapter {
 
 	//Don't know how to fix
