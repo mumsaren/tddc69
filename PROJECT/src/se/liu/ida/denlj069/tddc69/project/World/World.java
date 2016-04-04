@@ -6,11 +6,17 @@ import java.util.*;
 import java.util.List;
 
 /**
+ * The game world - everything the player can interact with.
+ * #Creates the visible world, the non-visible collision map, items,
+ * enemies and friends.
+ * #Updates and draws these objects.
+ *
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-09
  * Time: 20:14
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class World {
 
@@ -29,6 +35,11 @@ public class World {
     private List<Enemy> enemies;
     private List<Friend> friends;
 
+    /**
+     *
+     *
+     * @param mapName name of the *.txt file containing map info
+     */
     public World(String mapName) {
 
         this.mapName = mapName;

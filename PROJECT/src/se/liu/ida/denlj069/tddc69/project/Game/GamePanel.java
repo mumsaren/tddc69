@@ -10,11 +10,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
+ * The main game object.
+ * #Creates World, Player, QuestSystem and HUD objects
+ * #Starts the main game thread - Updates and draws everything
+ * #Handles keyboard input from user
+ *
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-07
  * Time: 12:36
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class GamePanel extends JPanel implements Runnable{
 

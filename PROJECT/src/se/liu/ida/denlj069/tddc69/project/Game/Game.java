@@ -5,19 +5,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
+ * The class game is used for creating a new game.
+ * # Creates the game window, GamePanel object (the main game object)
+ *
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-09
  * Time: 23:12
- * To change this template use File | Settings | File Templates.
+ *
  */
 
 public class Game extends JFrame {
 
     /**
      * Sets upp the game window and creates the GamePanel object
-     * - the main game object which will be drawn in the game
-     * window.
      */
     public Game(){
 
