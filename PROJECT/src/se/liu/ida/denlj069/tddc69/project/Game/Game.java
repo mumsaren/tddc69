@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * The class game is used for creating a new game.
  * # Creates the game window, GamePanel object (the main game object)
+ * The Game window class.
  *
  *
  * Created with IntelliJ IDEA.

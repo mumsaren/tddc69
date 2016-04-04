@@ -35,7 +35,7 @@ public class Inventory {
 
     private void loadImages(){
 
-        inventoryImg = new ImageIcon("/home/mumsaren/Dokument/TDDC69/PROJECT/src/se/liu/ida/denlj069/tddc69/project/img/HUD/Inventory.png").getImage();
+        inventoryImg = new ImageIcon("./src/se/liu/ida/denlj069/tddc69/project/img/HUD/" + "Inventory.png").getImage();
 
 
     }
