@@ -26,18 +26,35 @@ import static se.liu.ida.denlj069.tddc69.project.player.HUD.*;
  */
 public class GamePanel extends JPanel implements Runnable{
 
+    /**
+     * variables for setting game (window) dimensions
+     */
     private static final int GWIDTH = 800, GHEIGHT = 480;
     private static final Dimension GAME_DIM = new Dimension(GWIDTH, GHEIGHT);
+
+    /**
+     * how long the main game thread should sleep.
+     * lower value => faster game
+     */
     private static final long GAME_SPEED = 20;
 
+    /**
+     * variables for gameover-text size and position
+     */
     private static final int GAME_OVER_FONT_SIZE = 50;
     private static final int GAME_OVER_TEXT_X = 250;
     private static final int GAME_OVER_TEXT_Y = 200;
 
+    /**
+     * variables for the main game thread
+     */
     private boolean running = false;
     private boolean pause = false;
     private boolean gameover = false;
 
+    /**
+     * main game objects
+     */
     private Player p1;
     private World world;
     private HUD hud;

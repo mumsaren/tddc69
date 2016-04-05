@@ -1,6 +1,10 @@
 package se.liu.ida.denlj069.tddc69.project.world;
 
 /**
+ * Subclass of item.
+ *
+ * Can be picked up by the player.
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-25

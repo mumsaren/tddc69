@@ -1,6 +1,8 @@
 package se.liu.ida.denlj069.tddc69.project.player;
 
 /**
+ * Interface for observer pattern used by QuestSystem
+ *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-10-10

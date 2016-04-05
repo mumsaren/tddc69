@@ -57,7 +57,6 @@ public class QuestSystem implements PlayerListener
 
 	if(!doingQuest){
 
-	    //Do not know why this is wrong?
 	    for(final Entry<Friend, Quest> friendQuestEntry : questGivers.entrySet()){
 
 		if(friendQuestEntry.getKey().isTalking()){

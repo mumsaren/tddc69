@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
  * # Creates the game window, GamePanel object (the main game object)
  * The game window class.
  *
- *
  * Created with IntelliJ IDEA.
  * User: Mumsaren
  * Date: 2013-09-09
